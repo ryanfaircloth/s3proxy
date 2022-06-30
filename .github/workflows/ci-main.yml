@@ -166,7 +166,7 @@ jobs:
         with:
           node-version: "14"
       - name: Semantic Release
-        if: github.event_name != 'pull_request' && needs.meta.outputs.dockerhub-publish == 'true'
+        if: github.event_name != 'pull_request'
         id: version
         uses: cycjimmy/semantic-release-action@v3.0.0
         with:
