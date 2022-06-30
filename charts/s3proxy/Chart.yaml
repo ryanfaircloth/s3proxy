@@ -1,7 +1,8 @@
 apiVersion: v2
 name: s3proxy
 description: S3 Proxy Chart
-
+sources:
+  - https://github.com/ryanfaircloth/s3proxy.git
 type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
