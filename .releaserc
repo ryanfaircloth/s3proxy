@@ -39,7 +39,7 @@
                     "semantic-release-helm",
                     {
                         chartPath: './charts/s3proxy',
-                        registry: 'oci://ghcr.io/ryanfaircloth/s3proxy/charts'
+                        registry: 'ghcr.io/ryanfaircloth/s3proxy/charts'
                     }
                 ],
                 ["@semantic-release/git", {
