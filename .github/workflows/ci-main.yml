@@ -34,12 +34,12 @@ jobs:
           MY_KEY: ${{ secrets.DOCKER_PASS }}
       - uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: "18"
       - name: Semantic Release
         id: version
         uses: cycjimmy/semantic-release-action@v3.0.0
         with:
-          semantic_version: 17
+          semantic_version: 19
           extra_plugins: |
             @semantic-release/exec
             @semantic-release/git
@@ -164,13 +164,13 @@ jobs:
           cache-to: type=inline
       - uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: "18"
       - name: Semantic Release
         if: github.event_name != 'pull_request'
         id: version
         uses: cycjimmy/semantic-release-action@v3.0.0
         with:
-          semantic_version: 17
+          semantic_version: 19
           extra_plugins: |
             @semantic-release/exec
             @semantic-release/git
