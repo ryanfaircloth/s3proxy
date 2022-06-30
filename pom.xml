@@ -10,7 +10,7 @@
 
   <groupId>org.gaul</groupId>
   <artifactId>s3proxy</artifactId>
-  <version>3.0.0-helm-chart.1</version>
+  <version>3.0.0-helm-chart.2</version>
   <packaging>jar</packaging>
 
   <name>S3Proxy</name>
