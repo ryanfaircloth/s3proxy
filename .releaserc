@@ -37,7 +37,7 @@
                 "@semantic-release/release-notes-generator",
                 ["@semantic-release/exec", {
                     "prepareCmd": './.github/workflows/scripts/prepareHelm.sh ${nextRelease.version}',
-                    "publishCmd": 'helm push $(ls s3proxy-*.tgz) oci://ghcr.io/$GITHUB_REPOSITORY/charts'
+                    "publishCmd": './.github/workflows/scripts/publishHelm.sh'
                 }],
                 ["@semantic-release/git", {
                     "assets": [
