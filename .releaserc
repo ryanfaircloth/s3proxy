@@ -35,13 +35,10 @@
                     }
                 ],
                 "@semantic-release/release-notes-generator",
-                [
-                    "semantic-release-helm",
-                    {
-                        chartPath: './charts/s3proxy',
-                        registry: 'ghcr.io/ryanfaircloth/s3proxy/charts'
-                    }
-                ],
+                ["@semantic-release/exec", {
+                    "prepareCmd": 'yq \'.version = "${nextRelease.version}" | .appVersion style="double" | .appVersion = "${nextRelease.version}"\' charts/s3proxy/Chart.yaml;helm package charts/s3proxy',
+                    "publishCmd": 'helm push s3proxy-${nextRelease.version}.tgz oci://ghcr.io/$GITHUB_REPOSITORY/charts'
+                }],
                 ["@semantic-release/git", {
                     "assets": [
                         "pom.xml",
