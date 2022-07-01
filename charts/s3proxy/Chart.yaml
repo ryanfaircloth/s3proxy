@@ -4,5 +4,5 @@ description: S3 Proxy Chart
 sources:
   - https://github.com/ryanfaircloth/s3proxy.git
 type: application
-version: 3.0.2
-appVersion: 3.0.0-helm-chart.3
+version: 3.0.0-helm-chart.11
+appVersion: "3.0.0-helm-chart.11"
