@@ -36,7 +36,7 @@
                 ],
                 "@semantic-release/release-notes-generator",
                 ["@semantic-release/exec", {
-                    "prepareCmd": 'yq \'.version = "${nextRelease.version}" | .appVersion style="double" | .appVersion = "${nextRelease.version}"\' charts/s3proxy/Chart.yaml;helm package charts/s3proxy',
+                    "prepareCmd": './.github/workflows/scripts/prepareHelm.sh ${nextRelease.version}',
                     "publishCmd": 'helm push s3proxy-${nextRelease.version}.tgz oci://ghcr.io/$GITHUB_REPOSITORY/charts'
                 }],
                 ["@semantic-release/git", {
