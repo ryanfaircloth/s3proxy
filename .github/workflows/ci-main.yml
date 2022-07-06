@@ -1,14 +1,18 @@
 #
 name: Main CI
+#
 on:
   push:
     branches:
       - "master"
-      - "develop"
+      - "next"
+      - "next-major"
       - "*"
   pull_request:
     branches:
-      - "*"
+      - "master"
+      - "next"
+      - "next-major"
 jobs:
   meta:
     runs-on: ubuntu-latest
@@ -33,7 +37,7 @@ jobs:
         run: echo "::set-output name=defined::true"
         env:
           MY_KEY: ${{ secrets.DOCKER_PASS }}
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: "18"
       - name: Semantic Release
@@ -46,7 +50,6 @@ jobs:
             @semantic-release/git
             @google/semantic-release-replace-plugin
             conventional-changelog-conventionalcommits
-            semantic-release-helm
           dry_run: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -119,6 +122,9 @@ jobs:
     steps:
       #Yes we need code
       - uses: actions/checkout@v2
+        with:
+          submodules: false
+          persist-credentials: false
       - uses: actions/download-artifact@v2
         with:
           name: s3proxy
@@ -127,6 +133,7 @@ jobs:
         with:
           name: pom
           path: .
+
       # These steps are quick and will work or if fail only because of external issues
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -166,7 +173,7 @@ jobs:
             REVISION=${{ needs.meta.outputs.container_revision }}
           cache-from: type=registry,ref=${{ needs.meta.outputs.container_base }}
           cache-to: type=inline
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: "18"
       - uses: azure/setup-helm@v3
@@ -180,7 +187,6 @@ jobs:
             @semantic-release/exec
             @semantic-release/git
             conventional-changelog-conventionalcommits
-            semantic-release-helm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REGISTRY_USERNAME: ${{ github.repository_owner }}
