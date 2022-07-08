@@ -125,11 +125,11 @@ jobs:
         with:
           submodules: false
           persist-credentials: false
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: s3proxy
           path: target
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: pom
           path: .
