@@ -17,7 +17,6 @@
 package org.gaul.s3proxy;
 
 import static java.util.Objects.requireNonNull;
-
 import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.HashMap;
@@ -191,21 +190,6 @@ public final class AliasBlobStore extends ForwardingBlobStore {
     @Override
     public boolean deleteContainerIfEmpty(String container) {
         return delegate().deleteContainerIfEmpty(getContainer(container));
-    }
-
-    @Override
-    public boolean directoryExists(String container, String directory) {
-        return delegate().directoryExists(getContainer(container), directory);
-    }
-
-    @Override
-    public void createDirectory(String container, String directory) {
-        delegate().createDirectory(getContainer(container), directory);
-    }
-
-    @Override
-    public void deleteDirectory(String container, String directory) {
-        delegate().deleteDirectory(getContainer(container), directory);
     }
 
     @Override

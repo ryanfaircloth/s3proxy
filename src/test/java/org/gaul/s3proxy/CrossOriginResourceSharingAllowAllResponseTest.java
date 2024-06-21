@@ -40,7 +40,6 @@ import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-
 import com.google.common.io.ByteSource;
 import com.google.common.net.HttpHeaders;
 
@@ -59,10 +58,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
-
 import org.jclouds.blobstore.BlobStoreContext;
 import org.jclouds.blobstore.domain.Blob;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -157,7 +154,7 @@ public final class CrossOriginResourceSharingAllowAllResponseTest {
                 HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS)).isTrue();
         assertThat(response.getFirstHeader(
                 HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS).getValue())
-                .isEqualTo("GET, HEAD, PUT, POST");
+                .isEqualTo("GET, HEAD, PUT, POST, DELETE");
         assertThat(response.containsHeader(
                 HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS)).isTrue();
         assertThat(response.getFirstHeader(
@@ -181,7 +178,7 @@ public final class CrossOriginResourceSharingAllowAllResponseTest {
                 HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS)).isTrue();
         assertThat(response.getFirstHeader(
                 HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS).getValue())
-                    .isEqualTo("GET, HEAD, PUT, POST");
+                    .isEqualTo("GET, HEAD, PUT, POST, DELETE");
     }
 
     @Test

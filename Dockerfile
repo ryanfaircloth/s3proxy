@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM docker.io/library/eclipse-temurin:17-jre
 LABEL maintainer="Andrew Gaul <andrew@gaul.org>"
 
 RUN mkdir /data ;\
@@ -17,14 +17,18 @@ ENV \
     S3PROXY_IDENTITY="local-identity" \
     S3PROXY_CREDENTIAL="local-credential" \
     S3PROXY_VIRTUALHOST="" \
+    S3PROXY_KEYSTORE_PATH="keystore.jks" \
+    S3PROXY_KEYSTORE_PASSWORD="password" \
     S3PROXY_CORS_ALLOW_ALL="false" \
     S3PROXY_CORS_ALLOW_ORIGINS="" \
     S3PROXY_CORS_ALLOW_METHODS="" \
     S3PROXY_CORS_ALLOW_HEADERS="" \
+    S3PROXY_CORS_ALLOW_CREDENTIAL="" \
     S3PROXY_IGNORE_UNKNOWN_HEADERS="false" \
     S3PROXY_ENCRYPTED_BLOBSTORE="" \
     S3PROXY_ENCRYPTED_BLOBSTORE_PASSWORD="" \
     S3PROXY_ENCRYPTED_BLOBSTORE_SALT="" \
+    S3PROXY_READ_ONLY_BLOBSTORE="false" \
     JCLOUDS_PROVIDER="filesystem" \
     JCLOUDS_ENDPOINT="" \
     JCLOUDS_REGION="" \
@@ -36,6 +40,5 @@ ENV \
     JCLOUDS_KEYSTONE_PROJECT_DOMAIN_NAME="" \
     JCLOUDS_FILESYSTEM_BASEDIR="/data"
 
-EXPOSE 80
-RUN chown -R javauser:javauser /opt/s3proxy ; chown -R javauser:javauser /opt/s3proxy
+EXPOSE 80 443
 ENTRYPOINT ["/opt/s3proxy/run-docker-container.sh"]

@@ -17,7 +17,6 @@
 package org.gaul.s3proxy;
 
 import static java.util.Objects.requireNonNull;
-
 import static com.google.common.base.Preconditions.checkArgument;
 
 import java.net.URI;
@@ -32,6 +31,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.eclipse.jetty.http.HttpCompliance;
+import org.eclipse.jetty.http.UriCompliance;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.SecureRequestCustomizer;
@@ -87,6 +87,7 @@ public final class S3Proxy {
 
         HttpConfiguration httpConfiguration = new HttpConfiguration();
         httpConfiguration.setHttpCompliance(HttpCompliance.LEGACY);
+        httpConfiguration.setUriCompliance(UriCompliance.LEGACY);
         SecureRequestCustomizer src = new SecureRequestCustomizer();
         src.setSniHostCheck(false);
         httpConfiguration.addCustomizer(src);
@@ -140,7 +141,7 @@ public final class S3Proxy {
         private String keyStorePassword;
         private String virtualHost;
         private long maxSinglePartObjectSize = 5L * 1024 * 1024 * 1024;
-        private long v4MaxNonChunkedRequestSize = 32 * 1024 * 1024;
+        private long v4MaxNonChunkedRequestSize = 128 * 1024 * 1024;
         private boolean ignoreUnknownHeaders;
         private CrossOriginResourceSharing corsRules;
         private int jettyMaxThreads = 200;  // sourced from QueuedThreadPool()
@@ -161,16 +162,18 @@ public final class S3Proxy {
                     S3ProxyConstants.PROPERTY_ENDPOINT);
             String secureEndpoint = properties.getProperty(
                     S3ProxyConstants.PROPERTY_SECURE_ENDPOINT);
-            if (endpoint == null && secureEndpoint == null) {
+            boolean hasEndpoint = !Strings.isNullOrEmpty(endpoint);
+            boolean hasSecureEndpoint = !Strings.isNullOrEmpty(secureEndpoint);
+            if (!hasEndpoint && !hasSecureEndpoint) {
                 throw new IllegalArgumentException(
                         "Properties file must contain: " +
                         S3ProxyConstants.PROPERTY_ENDPOINT + " or " +
                         S3ProxyConstants.PROPERTY_SECURE_ENDPOINT);
             }
-            if (endpoint != null) {
+            if (hasEndpoint) {
                 builder.endpoint(new URI(endpoint));
             }
-            if (secureEndpoint != null) {
+            if (hasSecureEndpoint) {
                 builder.secureEndpoint(new URI(secureEndpoint));
             }
 
@@ -267,6 +270,9 @@ public final class S3Proxy {
                         S3ProxyConstants.PROPERTY_CORS_ALLOW_METHODS, "");
                 String corsAllowHeaders = properties.getProperty(
                         S3ProxyConstants.PROPERTY_CORS_ALLOW_HEADERS, "");
+                String allowCredentials = properties.getProperty(
+                        S3ProxyConstants.PROPERTY_CORS_ALLOW_CREDENTIAL, "");
+
                 Splitter splitter = Splitter.on(" ").trimResults()
                         .omitEmptyStrings();
 
@@ -285,7 +291,8 @@ public final class S3Proxy {
                 builder.corsRules(new CrossOriginResourceSharing(
                         Lists.newArrayList(splitter.split(corsAllowOrigins)),
                         Lists.newArrayList(splitter.split(corsAllowMethods)),
-                        Lists.newArrayList(splitter.split(corsAllowHeaders))));
+                        Lists.newArrayList(splitter.split(corsAllowHeaders)),
+                        allowCredentials));
             }
 
             String jettyMaxThreads = properties.getProperty(
@@ -296,7 +303,7 @@ public final class S3Proxy {
 
             String maximumTimeSkew = properties.getProperty(
                     S3ProxyConstants.PROPERTY_MAXIMUM_TIME_SKEW);
-            if (maximumTimeSkew != null) {
+            if (maximumTimeSkew != null && !maximumTimeSkew.trim().isEmpty()) {
                 builder.maximumTimeSkew(Integer.parseInt(maximumTimeSkew));
             }
 

@@ -1,9 +1,13 @@
 #!/bin/sh
 
 exec java \
+    $S3PROXY_JAVA_OPTS \
     -DLOG_LEVEL="${LOG_LEVEL}" \
     -Ds3proxy.endpoint="${S3PROXY_ENDPOINT}" \
+    -Ds3proxy.secure-endpoint="${S3PROXY_SECURE_ENDPOINT}" \
     -Ds3proxy.virtual-host="${S3PROXY_VIRTUALHOST}" \
+    -Ds3proxy.keystore-path="${S3PROXY_KEYSTORE_PATH}" \
+    -Ds3proxy.keystore-password="${S3PROXY_KEYSTORE_PASSWORD}" \
     -Ds3proxy.authorization="${S3PROXY_AUTHORIZATION}" \
     -Ds3proxy.identity="${S3PROXY_IDENTITY}" \
     -Ds3proxy.credential="${S3PROXY_CREDENTIAL}" \
@@ -11,11 +15,14 @@ exec java \
     -Ds3proxy.cors-allow-origins="${S3PROXY_CORS_ALLOW_ORIGINS}" \
     -Ds3proxy.cors-allow-methods="${S3PROXY_CORS_ALLOW_METHODS}" \
     -Ds3proxy.cors-allow-headers="${S3PROXY_CORS_ALLOW_HEADERS}" \
+    -Ds3proxy.cors-allow-credential="${S3PROXY_CORS_ALLOW_CREDENTIAL}" \
     -Ds3proxy.ignore-unknown-headers="${S3PROXY_IGNORE_UNKNOWN_HEADERS}" \
     -Ds3proxy.encrypted-blobstore="${S3PROXY_ENCRYPTED_BLOBSTORE}" \
     -Ds3proxy.encrypted-blobstore-password="${S3PROXY_ENCRYPTED_BLOBSTORE_PASSWORD}" \
     -Ds3proxy.encrypted-blobstore-salt="${S3PROXY_ENCRYPTED_BLOBSTORE_SALT}" \
-    -Ds3proxy.v4-max-non-chunked-request-size="${S3PROXY_V4_MAX_NON_CHUNKED_REQ_SIZE}" \
+    -Ds3proxy.v4-max-non-chunked-request-size="${S3PROXY_V4_MAX_NON_CHUNKED_REQ_SIZE:-33554432}" \
+    -Ds3proxy.read-only-blobstore="${S3PROXY_READ_ONLY_BLOBSTORE:-false}" \
+    -Ds3proxy.maximum-timeskew="${S3PROXY_MAXIMUM_TIMESKEW}" \
     -Djclouds.provider="${JCLOUDS_PROVIDER}" \
     -Djclouds.identity="${JCLOUDS_IDENTITY}" \
     -Djclouds.credential="${JCLOUDS_CREDENTIAL}" \

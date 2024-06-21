@@ -77,9 +77,8 @@ public class DecryptionInputStream extends FilterInputStream {
      * @throws IOException if cipher fails
      */
     public DecryptionInputStream(InputStream is, SecretKey key,
-        TreeMap<Integer, PartPadding> parts, int skipParts,
-        long skipPartBytes)
-        throws IOException {
+            TreeMap<Integer, PartPadding> parts, int skipParts,
+            long skipPartBytes) throws IOException {
         super(is);
         in = is;
         this.parts = parts;
@@ -316,7 +315,7 @@ public class DecryptionInputStream extends FilterInputStream {
         if (n < 0) {
             return 0;
         }
-        ostart += n;
+        ostart += (int) n;
         return n;
     }
 

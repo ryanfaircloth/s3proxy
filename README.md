@@ -96,17 +96,23 @@ s3proxy.bucket-locator.2=another-bucket
 In addition to the explicit names, [glob syntax](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob) can be used to configure many
 buckets for a given backend.
 
-A bucket (or a glob) cannot be assigned cannot be assigned to multiple backends.
+A bucket (or a glob) cannot be assigned to multiple backends.
 
 ## Middlewares
 
 S3Proxy can modify its behavior based on middlewares:
 
 * [bucket aliasing](https://github.com/gaul/s3proxy/wiki/Middleware-alias-blobstore)
+* [bucket locator](https://github.com/gaul/s3proxy/wiki/Middleware-bucket-locator)
 * [eventual consistency modeling](https://github.com/gaul/s3proxy/wiki/Middleware---eventual-consistency)
 * [large object mocking](https://github.com/gaul/s3proxy/wiki/Middleware-large-object-mocking)
 * [read-only](https://github.com/gaul/s3proxy/wiki/Middleware-read-only)
 * [sharded backend containers](https://github.com/gaul/s3proxy/wiki/Middleware-sharded-backend)
+* [regex rename blobs](https://github.com/gaul/s3proxy/wiki/Middleware-regex)
+
+## SSL Support
+
+S3Proxy can listen on HTTPS by setting the `secure-endpoint` and [configuring a keystore](http://wiki.eclipse.org/Jetty/Howto/Configure_SSL#Generating_Keys_and_Certificates_with_JDK_keytool). You can read more about how configure S3Proxy for SSL Support in [the dedicated wiki page](https://github.com/gaul/s3proxy/wiki/SSL-support) with Docker, Kubernetes or simply Java.
 
 ## Limitations
 
@@ -136,10 +142,11 @@ file (and corresponding ENV variables for Docker):
 s3proxy.cors-allow-origins=https://example\.com https://.+\.example\.com https://example\.cloud
 s3proxy.cors-allow-methods=GET PUT
 s3proxy.cors-allow-headers=Accept Content-Type
+s3proxy.cors-allow-credential=true
 ```
 
 CORS cannot be configured per bucket. `s3proxy.cors-allow-all=true` will accept any origin and header.
-Actual CORS requests are supported for GET, PUT and POST methods.
+Actual CORS requests are supported for GET, PUT, POST, HEAD and DELETE methods.
 
 The wiki collects
 [compatibility notes](https://github.com/gaul/s3proxy/wiki/Storage-backend-compatibility)
